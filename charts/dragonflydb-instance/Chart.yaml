@@ -1,0 +1,11 @@
+apiVersion: v2
+name: dragonflydb-instance
+description: A Helm chart for deploying DragonflyDB databases using the DragonflyDB Operator CRD.
+version: 0.1.0
+appVersion: "1.0.0"
+type: application
+
+maintainers:
+  - name: Labyrinth Labs
+    email: contact@lablabs.io
+    url: https://lablabs.io
