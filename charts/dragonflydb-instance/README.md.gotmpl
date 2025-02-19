@@ -7,6 +7,10 @@
 ## About
 dragonflydb-instance Helm chart
 
+## Requirements
+- **cert-manager**: Required for managing TLS certificates.
+  - Repository: [https://charts.jetstack.io](https://charts.jetstack.io)
+
 {{ template "chart.valuesSection" . }}
 
 {{ template "chart.sourcesSection" . }}

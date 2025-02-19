@@ -7,19 +7,29 @@ A Helm chart for deploying DragonflyDB databases using the DragonflyDB Operator 
 ## About
 dragonflydb-instance Helm chart
 
+## Requirements
+- **cert-manager**: Required for managing TLS certificates.
+  - Repository: [https://charts.jetstack.io](https://charts.jetstack.io)
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| acl | object | `{"enabled":true,"existingSecret":"","key":"","optional":false,"rules":"ACL SETUSER myuser ON >mypass +@string +@fast -@slow\n"}` | Access Control List (ACL) configuration |
+| acl.enabled | bool | `true` | Enable ACL |
+| acl.rules | string | `"ACL SETUSER myuser ON >mypass +@string +@fast -@slow\n"` | The ACL rules to apply to the database if existingSecret is empty @see https://www.dragonflydb.io/docs/managing-dragonfly/acl |
 | affinity | object | `{}` | Affinity rules for pod assignment @see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity |
 | args | list | `[]` | DragonflyDB configuration flags @see https://www.dragonflydb.io/docs/managing-dragonfly/flags |
-| authentication | object | `{"password":{"enabled":false,"existingSecret":"","password":""},"tls":{"enabled":false}}` | Authentication configuration for DragonflyDB Only one type of authentication can be enabled at a time. If both password.enabled and tls.enabled are set to true, the deployment will fail. |
-| authentication.password | object | `{"enabled":false,"existingSecret":"","password":""}` | Password-based authentication configuration |
+| authentication | object | `{"password":{"enabled":false,"existingSecret":"","key":"","optional":false,"password":""},"tls":{"enabled":false,"optional":false}}` | Authentication configuration for DragonflyDB Only one type of authentication can be enabled at a time. If both password.enabled and tls.enabled are set to true, the deployment will fail. |
+| authentication.password | object | `{"enabled":false,"existingSecret":"","key":"","optional":false,"password":""}` | Password-based authentication configuration |
 | authentication.password.enabled | bool | `false` | Enable password authentication |
 | authentication.password.existingSecret | string | `""` | Name of existing secret containing the password If empty, a new secret will be created |
+| authentication.password.key | string | `""` | The key to use for the password in the secret |
+| authentication.password.optional | bool | `false` | Optional password authentication |
 | authentication.password.password | string | `""` | Password to use when existingSecret is empty |
-| authentication.tls | object | `{"enabled":false}` | TLS-based client authentication configuration |
+| authentication.tls | object | `{"enabled":false,"optional":false}` | TLS-based client authentication configuration |
 | authentication.tls.enabled | bool | `false` | Enable TLS client authentication |
+| authentication.tls.optional | bool | `false` | Optional TLS client authentication |
 | fullnameOverride | string | `""` | String to fully override app.fullname template |
 | labels | object | `{}` | Additional labels to add to all resources XXX |
 | nameOverride | string | `""` | String to partially override app.fullname template |
@@ -42,7 +52,7 @@ dragonflydb-instance Helm chart
 | snapshot.dir | string | `""` | Destination directory for storing snapshots This can be an S3 bucket URL `s3://<bucket-name>/` or a local directory path. |
 | snapshot.enabled | bool | `false` | Enable or disable periodic snapshots |
 | tls | object | `{"enabled":false,"existingSecret":""}` | TLS configuration for the server |
-| tls.enabled | bool | `false` | Enable TLS for the server |
+| tls.enabled | bool | `false` | Enable TLS for the server. Note: If TLS is enabled, at least one authentication method (password or TLS) must be configured. |
 | tls.existingSecret | string | `""` | Name of existing secret containing the TLS certificates The secret should contain: - tls.crt: The server certificate - tls.key: The private key - ca.crt: The CA certificate |
 | tolerations | list | `[]` | Tolerations for pod assignment @see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/ |
 | topologySpreadConstraints | list | `[]` | Pod topology spread constraints @see https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |

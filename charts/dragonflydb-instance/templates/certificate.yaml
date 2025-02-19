@@ -1,4 +1,5 @@
 {{- if or .Values.tls.enabled .Values.authentication.tls.enabled }}
+  {{- if .Capabilities.APIVersions.Has "cert-manager.io/v1/Certificate" }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -20,4 +21,7 @@ spec:
     name: {{ include "base.fullname" . }}-issuer
     kind: Issuer
     group: cert-manager.io
+  {{- else }}
+  {{- fail "cert-manager.io/v1/Certificate API version is not available in this cluster" }}
+  {{- end }}
 {{- end }}

@@ -17,6 +17,13 @@ spec:
     {{- toYaml .Values.resources | nindent 4 }}
   {{- end }}
 
+  {{- if .Values.acl.enabled }}
+  aclFromSecret:
+    name: {{ .Values.acl.existingSecret | default (printf "%s-acl" (include "base.fullname" .)) }}
+    key: {{ .Values.acl.key | default "rules" }}
+    optional: {{ .Values.acl.optional | quote }}
+  {{- end }}
+
   {{- if .Values.args }}
   args:
     {{- toYaml .Values.args | nindent 4 }}
@@ -54,8 +61,9 @@ spec:
   {{- if .Values.authentication.password.enabled }}
   authentication:
     passwordFromSecret:
-      name: {{ include "base.fullname" . }}-password-auth
-      key: password
+      name: {{ .Values.authentication.password.existingSecret | default (printf "%s-password-auth" (include "base.fullname" .)) }}
+      key: {{ .Values.authentication.password.key | default "password" }}
+      optional: {{ .Values.authentication.password.optional | quote }}
   {{- end }}
 
   {{- if .Values.authentication.tls.enabled }}
@@ -63,6 +71,7 @@ spec:
     clientCaCertSecret:
       name: {{ include "base.fullname" . }}-cert-auth
       key: ca.crt
+      optional: {{ .Values.authentication.tls.optional | quote }}
   {{- end }}
 
   {{- if .Values.snapshot.enabled }}

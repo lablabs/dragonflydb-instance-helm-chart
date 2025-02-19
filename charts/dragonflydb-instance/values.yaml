@@ -29,15 +29,22 @@ authentication:
     existingSecret: ""
     # -- Password to use when existingSecret is empty
     password: ""
+    # -- Optional password authentication
+    optional: false
+    # -- The key to use for the password in the secret
+    key: ""
 
   # -- TLS-based client authentication configuration
   tls:
     # -- Enable TLS client authentication
     enabled: false
+    # -- Optional TLS client authentication
+    optional: false
 
 # -- TLS configuration for the server
 tls:
-  # -- Enable TLS for the server
+  # -- Enable TLS for the server.
+  # Note: If TLS is enabled, at least one authentication method (password or TLS) must be configured.
   enabled: false
   # -- Name of existing secret containing the TLS certificates
   # The secret should contain:
@@ -100,3 +107,18 @@ pdb:
   minAvailable: 0
   # -- Maximum number of pods that can be unavailable
   maxUnavailable: 0
+
+# -- Access Control List (ACL) configuration
+acl:
+  # -- Enable ACL
+  enabled: true
+  # If empty, a new secret will be created
+  existingSecret: ""
+  # If true, the ACL rules will be optional
+  optional: false
+  # The key to use for the ACL rules in the secret
+  key: ""
+  # -- The ACL rules to apply to the database if existingSecret is empty
+  # @see https://www.dragonflydb.io/docs/managing-dragonfly/acl
+  rules: |
+    ACL SETUSER myuser ON >mypass +@string +@fast -@slow
