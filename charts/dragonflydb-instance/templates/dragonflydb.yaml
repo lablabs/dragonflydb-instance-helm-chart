@@ -21,7 +21,7 @@ spec:
   aclFromSecret:
     name: {{ .Values.acl.existingSecret | default (printf "%s-acl" (include "base.fullname" .)) }}
     key: {{ .Values.acl.key | default "rules" }}
-    optional: {{ .Values.acl.optional | quote }}
+    optional: {{ .Values.acl.optional }}
   {{- end }}
 
   {{- if .Values.args }}
@@ -63,7 +63,7 @@ spec:
     passwordFromSecret:
       name: {{ .Values.authentication.password.existingSecret | default (printf "%s-password-auth" (include "base.fullname" .)) }}
       key: {{ .Values.authentication.password.key | default "password" }}
-      optional: {{ .Values.authentication.password.optional | quote }}
+      optional: {{ .Values.authentication.password.optional }}
   {{- end }}
 
   {{- if .Values.authentication.tls.enabled }}
@@ -71,7 +71,7 @@ spec:
     clientCaCertSecret:
       name: {{ include "base.fullname" . }}-cert-auth
       key: ca.crt
-      optional: {{ .Values.authentication.tls.optional | quote }}
+      optional: {{ .Values.authentication.tls.optional }}
   {{- end }}
 
   {{- if .Values.snapshot.enabled }}

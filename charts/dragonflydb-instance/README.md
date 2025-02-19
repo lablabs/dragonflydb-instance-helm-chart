@@ -15,9 +15,9 @@ dragonflydb-instance Helm chart
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| acl | object | `{"enabled":true,"existingSecret":"","key":"","optional":false,"rules":"ACL SETUSER myuser ON >mypass +@string +@fast -@slow\n"}` | Access Control List (ACL) configuration |
+| acl | object | `{"enabled":true,"existingSecret":"","key":"","optional":false,"rules":""}` | Access Control List (ACL) configuration |
 | acl.enabled | bool | `true` | Enable ACL |
-| acl.rules | string | `"ACL SETUSER myuser ON >mypass +@string +@fast -@slow\n"` | The ACL rules to apply to the database if existingSecret is empty @see https://www.dragonflydb.io/docs/managing-dragonfly/acl |
+| acl.rules | string | `""` | The ACL rules to apply to the database if existingSecret is empty @see https://www.dragonflydb.io/docs/managing-dragonfly/acl Example: rules: |   user user on >pass ~* &* +@string +@fast -@slow +set   user rouser on >ropass ~* &* +@read |
 | affinity | object | `{}` | Affinity rules for pod assignment @see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity |
 | args | list | `[]` | DragonflyDB configuration flags @see https://www.dragonflydb.io/docs/managing-dragonfly/flags |
 | authentication | object | `{"password":{"enabled":false,"existingSecret":"","key":"","optional":false,"password":""},"tls":{"enabled":false,"optional":false}}` | Authentication configuration for DragonflyDB Only one type of authentication can be enabled at a time. If both password.enabled and tls.enabled are set to true, the deployment will fail. |

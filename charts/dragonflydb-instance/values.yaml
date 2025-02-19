@@ -120,5 +120,8 @@ acl:
   key: ""
   # -- The ACL rules to apply to the database if existingSecret is empty
   # @see https://www.dragonflydb.io/docs/managing-dragonfly/acl
-  rules: |
-    ACL SETUSER myuser ON >mypass +@string +@fast -@slow
+  # Example:
+  # rules: |
+  #   user user on >pass ~* &* +@string +@fast -@slow +set
+  #   user rouser on >ropass ~* &* +@read
+  rules: ""
