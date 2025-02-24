@@ -15,4 +15,20 @@ entries:
     urls:
     - https://github.com/lablabs/helm-chart-template/releases/download/chart-name-0.1.0/chart-name-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-07T12:22:50.352654022Z"
+  dragonflydb-instance:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-02-24T13:56:41.154488311Z"
+    description: A Helm chart for deploying DragonflyDB databases using the DragonflyDB
+      Operator CRD.
+    digest: 01376b84b4d84b06d30deedc1f85d14b65ed08c140768b53ff39e40fa61fa654
+    maintainers:
+    - email: contact@lablabs.io
+      name: Labyrinth Labs
+      url: https://lablabs.io
+    name: dragonflydb-instance
+    type: application
+    urls:
+    - https://github.com/lablabs/dragonflydb-instance-helm-chart/releases/download/dragonflydb-instance-0.1.0/dragonflydb-instance-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-02-24T13:56:41.15449344Z"
