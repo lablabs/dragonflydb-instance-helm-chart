@@ -38,8 +38,9 @@ dragonflydb-instance Helm chart
 | pdb.enabled | bool | `false` | Enable pod disruption budget |
 | pdb.maxUnavailable | int | `0` | Maximum number of pods that can be unavailable |
 | pdb.minAvailable | int | `0` | Minimum number of pods that must be available |
-| podMonitor | object | `{"enabled":false}` | Prometheus PodMonitor configuration |
+| podMonitor | object | `{"enabled":false,"endpoints":[{"port":"admin"}]}` | Prometheus PodMonitor configuration |
 | podMonitor.enabled | bool | `false` | Enable Prometheus PodMonitor |
+| podMonitor.endpoints | list | `[{"port":"admin"}]` | Define how to scrape metrics from the selected pod |
 | priorityClassName | string | `""` | Priority class name for pods @see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | replicas | int | `1` | Number of DragonflyDB replicas to deploy |
 | resources | object | `{}` | Resource requests and limits for the DragonflyDB pods |

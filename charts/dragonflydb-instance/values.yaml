@@ -83,6 +83,9 @@ topologySpreadConstraints: []
 podMonitor:
   # -- Enable Prometheus PodMonitor
   enabled: false
+  # -- Define how to scrape metrics from the selected pod
+  endpoints:
+    - port: admin
 
 # -- Priority class name for pods
 # @see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/

@@ -14,5 +14,5 @@ spec:
     matchLabels:
       {{- include "base.selectorLabels" . | nindent 6 }}
   podMetricsEndpoints:
-    - port: admin
+    {{- toYaml .Values.podMonitor.endpoints | nindent 4 }}
 {{- end }}
