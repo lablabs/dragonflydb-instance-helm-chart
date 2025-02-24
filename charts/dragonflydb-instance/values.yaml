@@ -1,0 +1,130 @@
+# -- String to partially override app.fullname template
+nameOverride: ""
+# -- String to fully override app.fullname template
+fullnameOverride: ""
+
+# -- Additional labels to add to all resources XXX
+labels: {}
+
+# -- Number of DragonflyDB replicas to deploy
+replicas: 1
+
+# -- Resource requests and limits for the DragonflyDB pods
+resources: {}
+
+# -- DragonflyDB configuration flags
+# @see https://www.dragonflydb.io/docs/managing-dragonfly/flags
+args: []
+
+# -- Authentication configuration for DragonflyDB
+# Only one type of authentication can be enabled at a time.
+# If both password.enabled and tls.enabled are set to true, the deployment will fail.
+authentication:
+  # -- Password-based authentication configuration
+  password:
+    # -- Enable password authentication
+    enabled: false
+    # -- Name of existing secret containing the password
+    # If empty, a new secret will be created
+    existingSecret: ""
+    # -- Password to use when existingSecret is empty
+    password: ""
+    # -- Optional password authentication
+    optional: false
+    # -- The key to use for the password in the secret
+    key: ""
+
+  # -- TLS-based client authentication configuration
+  tls:
+    # -- Enable TLS client authentication
+    enabled: false
+    # -- Optional TLS client authentication
+    optional: false
+
+# -- TLS configuration for the server
+tls:
+  # -- Enable TLS for the server.
+  # Note: If TLS is enabled, at least one authentication method (password or TLS) must be configured.
+  enabled: false
+  # -- Name of existing secret containing the TLS certificates
+  # The secret should contain:
+  # - tls.crt: The server certificate
+  # - tls.key: The private key
+  # - ca.crt: The CA certificate
+  existingSecret: ""
+
+# -- Configuration for snapshot functionality
+snapshot:
+  # -- Enable or disable periodic snapshots
+  enabled: false
+  # -- Cron expression to define the schedule for taking snapshots
+  cron: "* * * * *"
+  # -- Destination directory for storing snapshots
+  # This can be an S3 bucket URL `s3://<bucket-name>/` or a local directory path.
+  dir: ""
+
+# -- Node selector for pod assignment
+# @see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+nodeSelector: {}
+
+# -- Tolerations for pod assignment
+# @see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+tolerations: []
+
+# -- Affinity rules for pod assignment
+# @see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+
+# -- Pod topology spread constraints
+# @see https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+topologySpreadConstraints: []
+
+# -- Prometheus PodMonitor configuration
+podMonitor:
+  # -- Enable Prometheus PodMonitor
+  enabled: false
+  # -- Define how to scrape metrics from the selected pod
+  endpoints:
+    - port: admin
+
+# -- Priority class name for pods
+# @see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+priorityClassName: ""
+
+# -- Service account configuration
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Pod disruption budget configuration
+# @see https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+pdb:
+  # -- Enable pod disruption budget
+  enabled: false
+  # -- Minimum number of pods that must be available
+  minAvailable: 0
+  # -- Maximum number of pods that can be unavailable
+  maxUnavailable: 0
+
+# -- Access Control List (ACL) configuration
+acl:
+  # -- Enable ACL
+  enabled: true
+  # If empty, a new secret will be created
+  existingSecret: ""
+  # If true, the ACL rules will be optional
+  optional: false
+  # The key to use for the ACL rules in the secret
+  key: ""
+  # -- The ACL rules to apply to the database if existingSecret is empty
+  # @see https://www.dragonflydb.io/docs/managing-dragonfly/acl
+  # Example:
+  # rules: |
+  #   user user on >pass ~* &* +@string +@fast -@slow +set
+  #   user rouser on >ropass ~* &* +@read
+  rules: ""

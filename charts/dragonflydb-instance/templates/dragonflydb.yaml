@@ -1,0 +1,86 @@
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: {{ include "base.fullname" . }}
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  labels:
+    {{- include "base.selectorLabels" . | nindent 4 }}
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+  {{- if .Values.resources }}
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}
+  {{- end }}
+
+  {{- if .Values.acl.enabled }}
+  aclFromSecret:
+    name: {{ .Values.acl.existingSecret | default (printf "%s-acl" (include "base.fullname" .)) }}
+    key: {{ .Values.acl.key | default "rules" }}
+    optional: {{ .Values.acl.optional }}
+  {{- end }}
+
+  {{- if .Values.args }}
+  args:
+    {{- toYaml .Values.args | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.topologySpreadConstraints }}
+  topologySpreadConstraints:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- if or .Values.tls.enabled .Values.authentication.tls.enabled }}
+  tlsSecretRef:
+    name: {{ include "base.fullname" . }}-tls
+  {{- end }}
+
+  {{- if and .Values.authentication.password.enabled .Values.authentication.tls.enabled }}
+  {{- fail "Only one type of authentication can be enabled at a time. Please disable either password or TLS authentication." }}
+  {{- end }}
+
+  {{- if .Values.authentication.password.enabled }}
+  authentication:
+    passwordFromSecret:
+      name: {{ .Values.authentication.password.existingSecret | default (printf "%s-password-auth" (include "base.fullname" .)) }}
+      key: {{ .Values.authentication.password.key | default "password" }}
+      optional: {{ .Values.authentication.password.optional }}
+  {{- end }}
+
+  {{- if .Values.authentication.tls.enabled }}
+  authentication:
+    clientCaCertSecret:
+      name: {{ include "base.fullname" . }}-cert-auth
+      key: ca.crt
+      optional: {{ .Values.authentication.tls.optional }}
+  {{- end }}
+
+  {{- if .Values.snapshot.enabled }}
+  snapshot:
+    cron: {{ .Values.snapshot.cron | quote }}
+    dir: {{ .Values.snapshot.dir | quote }}
+  {{- end }}
+
+  serviceAccountName: {{ include "base.serviceAccountName" . }}
+  {{- if .Values.priorityClassName }}
+  priorityClassName: {{ .Values.priorityClassName }}
+  {{- end }}

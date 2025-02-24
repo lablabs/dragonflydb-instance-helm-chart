@@ -1,0 +1,27 @@
+{{- if or .Values.tls.enabled .Values.authentication.tls.enabled }}
+  {{- if .Capabilities.APIVersions.Has "cert-manager.io/v1/Certificate" }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "base.fullname" . }}-tls
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "base.fullname" . }}-tls
+  commonName: {{ include "base.fullname" . }}
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  dnsNames:
+    - {{ include "base.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    - {{ include "base.fullname" . }}.{{ .Release.Namespace }}
+    - {{ include "base.fullname" . }}
+  issuerRef:
+    name: {{ include "base.fullname" . }}-issuer
+    kind: Issuer
+    group: cert-manager.io
+  {{- else }}
+  {{- fail "cert-manager.io/v1/Certificate API version is not available in this cluster" }}
+  {{- end }}
+{{- end }}

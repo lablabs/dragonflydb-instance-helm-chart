@@ -1,0 +1,14 @@
+{{- if or .Values.tls.enabled .Values.authentication.tls.enabled }}
+  {{- if .Capabilities.APIVersions.Has "cert-manager.io/v1/Issuer" }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "base.fullname" . }}-issuer
+  labels:
+    {{- include "base.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+  {{- else }}
+  {{- fail "cert-manager.io/v1/Issuer API version is not available in this cluster" }}
+  {{- end }}
+{{- end }}
