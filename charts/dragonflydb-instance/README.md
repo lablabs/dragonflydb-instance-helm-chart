@@ -15,8 +15,11 @@ dragonflydb-instance Helm chart
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| acl | object | `{"enabled":true,"existingSecret":"","key":"","optional":false,"rules":""}` | Access Control List (ACL) configuration |
-| acl.enabled | bool | `true` | Enable ACL |
+| acl | object | `{"enabled":false,"existingSecret":"","key":"","optional":false,"rules":""}` | Access Control List (ACL) configuration |
+| acl.enabled | bool | `false` | Enable ACL Note: When ACL is enabled, you must provide ACL rules either through 'rules' or 'existingSecret'. DragonflyDB will not start properly if ACL is enabled but no rules are provided. |
+| acl.existingSecret | string | `""` | Name of existing secret containing the ACL rules If empty, a new secret will be created |
+| acl.key | string | `""` | The key to use for the ACL rules in the secret |
+| acl.optional | bool | `false` | If true, the ACL rules will be optional |
 | acl.rules | string | `""` | The ACL rules to apply to the database if existingSecret is empty @see https://www.dragonflydb.io/docs/managing-dragonfly/acl Example: rules: |   user user on >pass ~* &* +@string +@fast -@slow +set   user rouser on >ropass ~* &* +@read |
 | affinity | object | `{}` | Affinity rules for pod assignment @see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity |
 | args | list | `[]` | DragonflyDB configuration flags @see https://www.dragonflydb.io/docs/managing-dragonfly/flags |

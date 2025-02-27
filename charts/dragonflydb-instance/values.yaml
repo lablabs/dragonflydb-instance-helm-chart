@@ -114,12 +114,15 @@ pdb:
 # -- Access Control List (ACL) configuration
 acl:
   # -- Enable ACL
-  enabled: true
+  # Note: When ACL is enabled, you must provide ACL rules either through 'rules' or 'existingSecret'.
+  # DragonflyDB will not start properly if ACL is enabled but no rules are provided.
+  enabled: false
+  # -- Name of existing secret containing the ACL rules
   # If empty, a new secret will be created
   existingSecret: ""
-  # If true, the ACL rules will be optional
+  # -- If true, the ACL rules will be optional
   optional: false
-  # The key to use for the ACL rules in the secret
+  # -- The key to use for the ACL rules in the secret
   key: ""
   # -- The ACL rules to apply to the database if existingSecret is empty
   # @see https://www.dragonflydb.io/docs/managing-dragonfly/acl
