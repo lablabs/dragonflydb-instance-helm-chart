@@ -114,7 +114,7 @@ pdb:
 # -- Access Control List (ACL) configuration
 acl:
   # -- Enable ACL
-  enabled: true
+  enabled: false
   # If empty, a new secret will be created
   existingSecret: ""
   # If true, the ACL rules will be optional
